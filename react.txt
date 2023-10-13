@@ -9,6 +9,8 @@
         2. to run react app : npm start
         3. to install axios: npm i axios
         4. install react-router-dom: npm i react-router-dom
+        5. install React Bootstrap : npm install react-bootstrap bootstrap
+            - Import bootstrap theme from https://bootswatch.com/ (bootstrap.min.css) to index.js file
 
             Features & Concepts
         ---------------------------
@@ -81,6 +83,7 @@
                             - No dependency passed: Runs on every render
                             - An empty array: Runs only on the first render
                             - Props or state values: Runs on the first render, And any time any dependency value changes
+                    - useNavigate() : used to redirect from one page to another, return a method for changing the location
                 - Custom Hook 
         20. Rendering List (Array of List) : use map method 
         21. React Forms : handled by component
@@ -94,7 +97,10 @@
         23. Routing / set up path for component in React
             - Use react-router-dom Library
                 - entire app should inside BrowserRouter
-                - 
+                - wrap all component which needed to be set up path inside Routes 
+                - To set up path for component use Route
+            - Link : used to redirect from one page another 
+            - useNavigate Hook : redirection
 	
 			
 		-------------React Appications------------------
@@ -111,6 +117,8 @@
             - React Hook : useState,useEffect
             - Api call using axios
         3. Media Player App
+            - React Routing
+            - React Bootstrap
 
 
                 
