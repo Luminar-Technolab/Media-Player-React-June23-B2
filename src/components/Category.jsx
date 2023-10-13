@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addCategory, deleteCategory, getAVideo, getAllCategory, updateCategory } from '../services/allAPI';
 import VideoCard from './VideoCard';
 
-function Category() {
+function Category({dragRes}) {
   const [allCategories,setAllCategories]=useState([])
   const [categoryName,setCategoryName]= useState("")
   const [show, setShow] = useState(false);
@@ -42,7 +42,7 @@ function Category() {
   }
   useEffect(()=>{
     getCategories()
-  },[])
+  },[dragRes])
 
   const handleDelete = async (id)=>{
     await deleteCategory(id)
@@ -70,6 +70,11 @@ function Category() {
     getCategories()
   }
 
+  const categoryDrag = (e,categoryId,videoId)=>{
+    let dataShare = {categoryId,videoId}
+    e.dataTransfer.setData("dataShare",JSON.stringify(dataShare))
+  }
+
   return (
     <>
     <div className="d-grid ms-3">
@@ -77,7 +82,7 @@ function Category() {
     </div>
     {
       allCategories?.length>0?allCategories?.map(item=>(
-        <div className="mt-3 ms-3 border rounded p-3" droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>videoDrop(e,item?.id)} >
+        <div className="mt-3 ms-3 border rounded p-3" droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>videoDrop(e,item?.id)}  >
           <div className="d-flex justify-content-between align-items-center">
             <h6>{item?.categoryName} </h6>
             <button onClick={()=>handleDelete(item?.id)} className='btn'> <i className="fa-solid fa-trash text-danger"></i> </button>
@@ -86,7 +91,7 @@ function Category() {
             {
               item?.allVideos &&
               item?.allVideos.map(card=>(
-                <Col sm={12} >
+                <Col sm={12} draggable onDragStart={(e)=>categoryDrag(e,item.id,card.id)} >
                   <VideoCard displayData={card} insideCategory={true} />
                 </Col>
               ))

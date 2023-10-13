@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import VideoCard from './VideoCard';
 import { Col, Row } from 'react-bootstrap'
-import { getAllVideos } from '../services/allAPI';
+import { getAllCategory, getAllVideos, updateCategory } from '../services/allAPI';
 
-function View({serverResponse}) {
+function View({serverResponse,setDragRes}) {
 
   const [deleteStatus,setDeleteStatus] = useState(false)
   const [allVideos,setAllVideos] = useState([])
@@ -18,9 +18,29 @@ function View({serverResponse}) {
     setDeleteStatus(false)
   },[serverResponse,deleteStatus])
   // console.log(allVideos);
+  const dragOver = (e)=>{
+    e.preventDefault()
+  }
+
+  const videoDropped = async (e)=>{
+    const {categoryId,videoId} = JSON.parse(e.dataTransfer.getData("dataShare"))
+    console.log(categoryId,videoId);
+    const {data} = await getAllCategory()
+    const selectedCategory = data.find(item=>item.id==categoryId)
+    let result = selectedCategory.allVideos.filter((video,index)=>video.id!=videoId)
+    // let index = selectedCategory.allVideos.indexOf(result)
+    // selectedCategory.allVideos.splice(index,1)
+    const {id,categoryName} = selectedCategory
+    let newCategory ={
+      id,categoryName,allVideos:result
+    }
+    console.log(newCategory);
+    const res = await updateCategory(categoryId,newCategory)
+    setDragRes(res)
+  }
   return (
     <>
-    <Row>
+    <Row droppable onDragOver={e=>dragOver(e)} onDrop={e=>videoDropped(e)}>
       {
         allVideos.length>0?
         allVideos.map(video=>(
